@@ -1,21 +1,22 @@
 # frozen_string_literal: true
 
+# Object representing a game of Tic Tac Toe
 class Game
-  attr_accessor :player_one_name, :player_two_name
+  attr_accessor :player_x_name, :player_o_name
   attr_reader :whose_turn
 
-  def initialize(player_one_name, player_two_name)
-    self.player_one_name = player_one_name
-    self.player_two_name = player_two_name
-    @whose_turn = 1
+  def initialize(player_x_name, player_o_name)
+    self.player_x_name = player_x_name
+    self.player_o_name = player_o_name
+    @whose_turn = 'X'
   end
 
   def end_turn
-    if whose_turn == 1
-      @whose_turn = 2
-    else
-      @whose_turn = 1
-    end
+    @whose_turn = if whose_turn == 'X'
+                    'O'
+                  else
+                    'X'
+                  end
     whose_turn
   end
 end

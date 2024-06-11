@@ -22,7 +22,7 @@ class Board
   end
 
   def to_s
-    row_divider = '-' * 15
+    row_divider = '----+-----+----'
     "#{row_string(0)}\n#{row_divider}\n#{row_string(1)}\n#{row_divider}\n#{row_string(2)}"
   end
 

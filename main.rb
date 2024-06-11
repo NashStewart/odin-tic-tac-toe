@@ -1,43 +1,46 @@
 # frozen_string_literal: true
 
+require 'colorize'
+
 require_relative 'lib/game'
 require_relative 'lib/board'
 
-# puts 'Enter name for Player X'
-# player_x_name = gets.chomp
-# puts 'Enter name for Player O'
-# player_o_name = gets.chomp
-
-player_x_name = 'Bilbo'
-player_o_name = 'Gandalf'
-game = Game.new(player_x_name, player_o_name)
+game = Game.new
 board = Board.new
+
+game.prompt_for_player_names
+
+turn_divider = '* ' * 9
+puts "\n#{turn_divider.colorize(:magenta)}"
+puts "\n#{board}".colorize(:cyan)
 
 turns_taken = 0
 winner = nil
 until winner || turns_taken == 9
-  puts "\n#{board}"
+  player = game.current_player_name
+  mark = game.current_player_mark
 
-  mark = game.whose_turn
-  puts "Choose row for '#{mark}':"
+  puts "\n#{game.current_player_name}'s turn".colorize(:yellow)
+  puts 'Choose a row:'
   row = gets.chomp.to_i - 1
-  puts "Choose column for '#{mark}':"
+
+  puts 'Choose a column:'
   column = gets.chomp.to_i - 1
 
   valid_input = board.mark_cell(row, column, mark)
-  winner = mark if board.three_in_a_row?(mark)
+  winner = player if board.three_in_a_row?(mark)
+
   if valid_input
     game.end_turn
     turns_taken += 1
   end
+
+  puts turn_divider.colorize(:magenta)
+  puts "\n#{board}".colorize(:cyan)
 end
 
-puts "\n#{board}"
-
-if winner == 'X'
-  puts "#{game.player_x_name} wins!"
-elsif winner == 'O'
-  puts "#{game.player_o_name} wins!"
+if winner
+  puts "\n#{winner} wins!\n".colorize(:green)
 else
-  puts 'Stalemate :('
+  puts "\nStalemate :(\n".colorize(:red)
 end

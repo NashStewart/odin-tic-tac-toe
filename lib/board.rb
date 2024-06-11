@@ -21,6 +21,13 @@ class Board
     horizontal_match?(mark) || vertical_match?(mark) || slope_down_match?(mark) || slope_up_match?(mark)
   end
 
+  def to_s
+    row_divider = '-' * 15
+    "#{row_string(0)}\n#{row_divider}\n#{row_string(1)}\n#{row_divider}\n#{row_string(2)}"
+  end
+
+  private
+
   def horizontal_match?(mark)
     cells.any? { |row| row.all? mark }
   end
@@ -38,11 +45,11 @@ class Board
   end
 
   def slope_up_match?(mark)
-    cells.each_with_index { |_, i| return false unless cells[i][-i] == mark }
+    cells.each_with_index { |_, i| return false unless cells[i][-i - 1] == mark }
     true
   end
 
-  def to_s
-    "#{cells[0]}\n#{cells[1]}\n#{cells[2]}"
+  def row_string(row_index)
+    cells[row_index].map { |cell| cell ? " #{cell} " : '   ' }.join(' | ')
   end
 end

@@ -11,8 +11,10 @@ class Game
   end
 
   def prompt_for_player_names
+    puts "\n" * 50
     puts 'Enter name for Player X'
     @player_x_name = gets.chomp
+    puts "\n" * 50
     puts "\nEnter name for Player O"
     @player_o_name = gets.chomp
     @current_player_name = @player_x_name

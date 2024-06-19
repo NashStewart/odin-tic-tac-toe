@@ -10,6 +10,7 @@ board = Board.new
 
 game.prompt_for_player_names
 
+puts "\n" * 50
 turn_divider = '* ' * 9
 puts "\n#{turn_divider.colorize(:magenta)}"
 puts "\n#{board}".colorize(:cyan)
@@ -35,6 +36,7 @@ until winner || turns_taken == 9
     turns_taken += 1
   end
 
+  puts "\n" * 50
   puts turn_divider.colorize(:magenta)
   puts "\n#{board}".colorize(:cyan)
 end

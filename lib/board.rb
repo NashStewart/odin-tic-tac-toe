@@ -26,10 +26,8 @@ class Board
     "#{row_string(0)}\n#{row_divider}\n#{row_string(1)}\n#{row_divider}\n#{row_string(2)}"
   end
 
-  private
-
-  def horizontal_match?(mark)
-    cells.any? { |row| row.all? mark }
+  def horizontal_match?(player_mark)
+    cells.any? { |row| row.all? player_mark }
   end
 
   def vertical_match?(mark)

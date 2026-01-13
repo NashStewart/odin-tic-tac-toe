@@ -4,11 +4,11 @@
 class Board
   attr_reader :cells
 
-  def initialize
-    @cells = Array.new(3) { Array.new(3) }
+  def initialize(cells = Array.new(3) { Array.new(3) })
+    @cells = cells
   end
 
-  def mark_cell(row, column, mark)
+  def update_cell(row, column, mark)
     return nil if row.negative? || row >= cells.size
     return nil if column.negative? || column >= cells[row].size
     return nil unless cells[row][column].nil?

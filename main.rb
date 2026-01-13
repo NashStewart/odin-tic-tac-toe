@@ -28,7 +28,7 @@ until winner || turns_taken == 9
   puts 'Choose a column:'
   column = gets.chomp.to_i - 1
 
-  valid_input = board.mark_cell(row, column, mark)
+  valid_input = board.update_cell(row, column, mark)
   winner = player if board.three_in_a_row?(mark)
 
   if valid_input

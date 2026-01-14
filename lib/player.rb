@@ -5,7 +5,7 @@ class Player
 
   def initialize(name, mark)
     @name = name
-    @makr = mark
+    @mark = mark
   end
 end
 

@@ -54,14 +54,14 @@ describe Board do
     end
 
     context 'when cell is populated' do
-      subject(:empty_board) { described_class.new(Array.new(3, Array.new(3, player_o_mark))) }
+      subject(:populated_o_board) { described_class.new(Array.new(3, Array.new(3, player_o_mark))) }
       
       it 'does not update cell' do
         row = 1
         column = 2
 
-        empty_board.update_cell(row, column, player_x_mark)
-        updated_cell = empty_board.cells[row][column]
+        populated_o_board.update_cell(row, column, player_x_mark)
+        updated_cell = populated_o_board.cells[row][column]
 
         expect(updated_cell).to eq(player_o_mark)
       end
@@ -73,33 +73,211 @@ describe Board do
       let(:row_one) { Array.new(3, player_o_mark) }
       let(:row_two) { Array.new(3, nil) }
       let(:row_three) { [player_o_mark, nil, player_x_mark] }
-      subject(:horizontal_match_board) { described_class.new([row_one, row_two, row_three]) }
+      subject(:horizontal_o_match_board) { described_class.new([row_one, row_two, row_three]) }
 
       it 'returns true when Player O mark is given' do
-        result = horizontal_match_board.horizontal_match?(player_o_mark)
+        result = horizontal_o_match_board.horizontal_match?(player_o_mark)
         expect(result).to eq(true)
       end
 
-      it 'returns flase when Player X mark is given' do
-        result = horizontal_match_board.horizontal_match?(player_x_mark)
+      it 'returns false when Player X mark is given' do
+        result = horizontal_o_match_board.horizontal_match?(player_x_mark)
         expect(result).to eq(false)
       end
     end
 
-    context 'when player O has a match' do
+    context 'when player X has a match' do
       let(:row_one) { Array.new(3, nil) }
       let(:row_two) { Array.new([nil, player_o_mark, player_x_mark]) }
       let(:row_three) { Array.new(3, player_x_mark) }
-      subject(:horizontal_match_board) { described_class.new([row_one, row_two, row_three]) }
+      subject(:horizontal_x_match_board) { described_class.new([row_one, row_two, row_three]) }
 
       it 'returns true when Player X mark is given' do
-        result = horizontal_match_board.horizontal_match?(player_x_mark)
+        result = horizontal_x_match_board.horizontal_match?(player_x_mark)
         expect(result).to eq(true)
       end
 
-      it 'returns flase when Player O mark is given' do
-        result = horizontal_match_board.horizontal_match?(player_o_mark)
+      it 'returns false when Player O mark is given' do
+        result = horizontal_x_match_board.horizontal_match?(player_o_mark)
         expect(result).to eq(false)
+      end
+    end
+  end
+
+  describe '#vertical_match?' do
+    context 'when player O has a match' do
+      let(:row_one) { [player_o_mark, nil, player_x_mark] }
+      let(:row_two) { [player_o_mark, player_x_mark, nil] }
+      let(:row_three) { [player_o_mark, nil, player_x_mark] }
+      subject(:vertical_o_match_board) { described_class.new([row_one, row_two, row_three]) }
+
+      it 'returns true when Player O mark is given' do
+        result = vertical_o_match_board.vertical_match?(player_o_mark)
+        expect(result).to eq(true)
+      end
+
+      it 'returns false when Player X mark is given' do
+        result = vertical_o_match_board.vertical_match?(player_x_mark)
+        expect(result).to eq(false)
+      end
+    end
+
+    context 'when player X has a match' do
+      let(:row_one) { [nil, player_o_mark, player_x_mark] }
+      let(:row_two) { [nil, player_o_mark, player_x_mark] }
+      let(:row_three) { [player_o_mark, nil, player_x_mark] }
+      subject(:vertical_x_match_board) { described_class.new([row_one, row_two, row_three]) }
+
+      it 'returns true when Player X mark is given' do
+        result = vertical_x_match_board.vertical_match?(player_x_mark)
+        expect(result).to eq(true)
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = vertical_x_match_board.vertical_match?(player_o_mark)
+        expect(result).to eq(false)
+      end
+    end
+  end
+
+  describe '#slope_down_match?' do
+    context 'when player O has a match' do
+      let(:row_one) { [player_o_mark, nil, player_x_mark] }
+      let(:row_two) { [nil, player_o_mark, player_x_mark] }
+      let(:row_three) { [nil, player_x_mark, player_o_mark] }
+      subject(:downward_o_match_board) { described_class.new([row_one, row_two, row_three]) }
+
+      it 'returns true when Player O mark is given' do
+        result = downward_o_match_board.slope_down_match?(player_o_mark)
+        expect(result).to eq(true)
+      end
+
+      it 'returns false when Player X mark is given' do
+        result = downward_o_match_board.slope_down_match?(player_x_mark)
+        expect(result).to eq(false)
+      end
+    end
+
+    context 'when player X has a match' do
+      let(:row_one) { [player_x_mark, player_o_mark, nil] }
+      let(:row_two) { [nil, player_x_mark, player_o_mark] }
+      let(:row_three) { [player_o_mark, nil, player_x_mark] }
+      subject(:downward_x_match_board) { described_class.new([row_one, row_two, row_three]) }
+
+      it 'returns true when Player X mark is given' do
+        result = downward_x_match_board.slope_down_match?(player_x_mark)
+        expect(result).to eq(true)
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = downward_x_match_board.slope_down_match?(player_o_mark)
+        expect(result).to eq(false)
+      end
+    end
+  end
+
+  describe '#slope_up_match?' do
+    context 'when player O has a match' do
+      let(:row_one) { [player_x_mark, nil, player_o_mark] }
+      let(:row_two) { [nil, player_o_mark, player_x_mark] }
+      let(:row_three) { [player_o_mark, player_x_mark, nil] }
+      subject(:upward_o_match_board) { described_class.new([row_one, row_two, row_three]) }
+
+      it 'returns true when Player O mark is given' do
+        result = upward_o_match_board.slope_up_match?(player_o_mark)
+        expect(result).to eq(true)
+      end
+
+      it 'returns false when Player X mark is given' do
+        result = upward_o_match_board.slope_up_match?(player_x_mark)
+        expect(result).to eq(false)
+      end
+    end
+
+    context 'when player X has a match' do
+      let(:row_one) { [nil, player_o_mark, player_x_mark] }
+      let(:row_two) { [player_o_mark, player_x_mark, player_o_mark] }
+      let(:row_three) { [player_x_mark, nil, player_o_mark] }
+      subject(:upward_x_match_board) { described_class.new([row_one, row_two, row_three]) }
+
+      it 'returns true when Player X mark is given' do
+        result = upward_x_match_board.slope_up_match?(player_x_mark)
+        expect(result).to eq(true)
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = upward_x_match_board.slope_up_match?(player_o_mark)
+        expect(result).to eq(false)
+      end
+    end
+  end
+
+  describe '#three_in_a_row?' do
+    context 'when Player X has horizontal match' do
+      let(:row_one) { [player_o_mark, nil, nil] }
+      let(:row_two) { [player_x_mark, player_x_mark, player_x_mark] }
+      let(:row_three) { [nil, player_o_mark, player_o_mark] }
+      subject(:horizontal_match_board) { described_class.new([row_one, row_two, row_three]) }
+      
+      it 'returns true when Player X mark is given' do
+        result = horizontal_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = horizontal_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+    end
+
+    context 'when Player X has vertical match' do
+      let(:row_one) { [player_o_mark, player_x_mark, nil] }
+      let(:row_two) { [nil, player_x_mark, player_o_mark] }
+      let(:row_three) { [player_o_mark, player_x_mark, nil] }
+      subject(:vertial_match_board) { described_class.new([row_one, row_two, row_three]) }
+      
+      it 'returns true when Player X mark is given' do
+        result = vertial_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = vertial_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+    end
+
+    context 'when Player X has downward diagonal match' do
+      let(:row_one) { [player_x_mark, player_o_mark, nil] }
+      let(:row_two) { [nil, player_x_mark, player_o_mark] }
+      let(:row_three) { [player_o_mark, nil, player_x_mark] }
+      subject(:downward_match_board) { described_class.new([row_one, row_two, row_three]) }
+      
+      it 'returns true when Player X mark is given' do
+        result = downward_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = downward_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+    end
+
+    context 'when Player X has upward diagonal match' do
+      let(:row_one) { [player_o_mark, player_o_mark, player_x_mark] }
+      let(:row_two) { [player_o_mark, player_x_mark, nil] }
+      let(:row_three) { [player_x_mark, nil, nil] }
+      subject(:upward_match_board) { described_class.new([row_one, row_two, row_three]) }
+      
+      it 'returns true when Player X mark is given' do
+        result = upward_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
+      end
+
+      it 'returns false when Player O mark is given' do
+        result = upward_match_board.three_in_a_row?(player_x_mark)
+        expect(result).to eq(true) 
       end
     end
   end

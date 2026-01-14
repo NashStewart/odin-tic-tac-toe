@@ -1,40 +1,62 @@
 # frozen_string_literal: true
 
+require 'colorize'
+
+require_relative '../lib/board'
+require_relative '../lib/player'
+require_relative '../lib/display'
+
 # Object representing a game of Tic Tac Toe
 class Game
-  attr_reader :current_player_mark, :current_player_name
-
   def initialize
-    @player_x_name = 'X'
-    @player_o_name = 'O'
-    @current_player_mark = 'X'
+    @board = Board.new
+    @display = Display.new(@board.cells)
+    @player_x = new_player('X')
+    @player_o = new_player('O')
+    @current_player = @player_x
   end
 
-  def prompt_for_player_names
-    puts "\n" * 50
-    puts 'Enter name for Player X'
-    @player_x_name = gets.chomp
-    puts "\n" * 50
-    puts "\nEnter name for Player O"
-    @player_o_name = gets.chomp
-    @current_player_name = @player_x_name
-  end
+  def play
+    turns_taken = 0
+    winner = false
 
-  def get_player_name(mark)
-    if mark == 'X'
-      @player_x_name
-    elsif mark == 'O'
-      @player_o_name
+    @display.show_board(@current_player.name)
+    
+    until winner || turns_taken == 9
+      puts "\n#{@current_player.name}'s turn".colorize(:yellow)
+      
+      puts 'Choose a row:'
+      row = gets.chomp.to_i - 1
+
+      puts 'Choose a column:'
+      column = gets.chomp.to_i - 1
+
+      valid_input = @board.update_cell(row, column, @current_player.mark)
+      winner = @current_player.name if @board.three_in_a_row?(@current_player.mark)
+
+      if valid_input
+        update_player_turn
+        turns_taken += 1
+      end
+
+      @display.show_board
     end
-  end
 
-  def end_turn
-    if current_player_mark == 'X'
-      @current_player_name = @player_o_name
-      @current_player_mark = 'O'
+    if winner
+      puts "\n#{winner} wins!\n".colorize(:green)
     else
-      @current_player_name = @player_x_name
-      @current_player_mark = 'X'
+      puts "\nStalemate :(\n".colorize(:red)
     end
+  end
+
+  def new_player(player_mark)
+    @display.prompt_for_player_name(player_mark)
+    puts
+    player_name = gets.chomp
+    Player.new(player_name, player_mark)
+  end
+
+  def update_player_turn 
+    @current_player = @current_player == @player_x ? @player_o : @player_x
   end
 end

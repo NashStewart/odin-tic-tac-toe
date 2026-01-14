@@ -20,7 +20,7 @@ class Game
     turns_taken = 0
     winner = false
 
-    @display.show_board(@current_player.name)
+    @display.show_board
     
     until winner || turns_taken == 9
       puts "\n#{@current_player.name}'s turn".colorize(:yellow)
